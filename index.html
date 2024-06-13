@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora Simple</title>
+  <style>
+    body { 
+      background: url(Background.png); 
+      background-size:85%;
+	    background-position:20% ;
+ 
+    }
+    .calculadora {
+      width: 20em;
+      margin: 50px auto;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 100px rgba(0, 0, 0, 0.694);
+    }
+    .mostrar {
+      width: 95%;
+      height: 2em;
+      font-size: 1.5em;
+      text-align: right;
+      padding: 5px;
+      margin-bottom: 10px;
+      border: 0.2em solid #2c6755;
+      border-radius: 5px;
+    }
+    .botones {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-gap: 0.5em;
+    }
+    .boton {
+      width: 100%;
+      height: 50px;
+      font-size: 18px;
+      background-color: #fff;
+      border: 0.2em solid #2c6755;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .boton:hover {
+      background-color: #e6e6e6;
+    }
+  </style>
+</head> 
+<body> 
+  <div class="calculadora">
+    <input class="mostrar" id="operar" type="text" placeholder="0">
+    <div class="botones">
+      <button class="boton" id="sqrt">sqrt</button>
+      <button class="boton" id="square">(a+b)^2</button>
+      <button class="boton" id="clearAll">A.C</button>
+      <button class="boton" id="quadratic">Ec.2do.G</button>
+      <button class="boton" id="clear">C</button>
+      <button class="boton" id="seven">7</button>
+      <button class="boton" id="eight">8</button>
+      <button class="boton" id="nine">9</button>
+      <button class="boton" id="comma">,</button>
+      <button class="boton" id="backspace">←</button>
+      <button class="boton" id="four">4</button>
+      <button class="boton" id="five">5</button>
+      <button class="boton" id="six">6</button>
+      <button class="boton" id="subtract">-</button>   
+      <button class="boton" id="add">+</button>
+      <button class="boton" id="one">1</button>
+      <button class="boton" id="two">2</button>
+      <button class="boton" id="three">3</button>
+      <button class="boton" id="divide">/</button>
+      <button class="boton" id="multiply">*</button>
+      <button class="boton" id="decimal">.</button>
+      <button class="boton" id="zero">0</button>
+      <button class="boton" id="equals">=</button>
+    </div>
+  </div>
+
+  <script>
+    const display = document.getElementById('operar');
+    const buttons = document.querySelectorAll('.boton');
+
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        const value = button.textContent;
+        switch (value) {
+          case 'C':
+            display.value = '0';
+            break;
+          case '←':
+            display.value = display.value.slice(0, -1);
+            break;
+          case '=':
+            try {
+              display.value = eval(display.value);
+            } catch (error) {
+              display.value = 'Error';
+            }
+            break;
+          case 'sqrt':
+            if (display.value !== '0') {
+              display.value = Math.sqrt(parseFloat(display.value));
+            }
+            break;
+          case '(a+b)^2':
+            if (display.value !== '0') {
+              const parts = display.value.split('+');
+              if (parts.length === 2) {
+                const a = parseFloat(parts[0].trim());
+                const b = parseFloat(parts[1].trim());
+                display.value = (a + b) ** 2;
+              } else {
+                display.value = 'Error: Ingrese dos números separados por +';
+              }
+            }
+            break;
+          case 'A.C':
+            if (display.value !== '0') {
+              const radius = parseFloat(display.value);
+              display.value = Math.PI * (radius ** 2);
+            }
+            break;
+          case 'Ec.2do.G':
+            if (display.value !== '0') {
+              const parts = display.value.split(',');
+              if (parts.length === 3) {
+                const a = parseFloat(parts[0].trim());
+                const b = parseFloat(parts[1].trim());
+                const c = parseFloat(parts[2].trim());
+                const discriminant = b ** 2 - 4 * a * c;
+                if (discriminant < 0) {
+                  display.value = 'No hay soluciones reales';
+                } else if (discriminant === 0) {
+                  display.value = (-b) / (2 * a);
+                } else {
+                  const x1 = (-b + Math.sqrt(discriminant)) / (2 * a);
+                  const x2 = (-b - Math.sqrt(discriminant)) / (2 * a);
+                  display.value = `x1 = ${x1}, x2 = ${x2}`;
+                }
+              } else {
+                display.value = 'Error: Ingrese los coeficientes a, b y c separados por comas';
+              }
+            }
+            break;
+          case ',':
+            if (display.value === '0') {
+              display.value = ',';
+            } else {
+              display.value += ',';
+            }
+            break;
+          default:
+            if (display.value === '0') {
+              display.value = value;
+            } else {
+              display.value += value;
+            }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
